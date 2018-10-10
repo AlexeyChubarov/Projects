@@ -28,14 +28,14 @@ double dIntegral(double (*func)(double x), double from, double to, double step)
 int main()
 {
 	double a, b, delta;
-	int c;
 	printf("please, enter the limits of integration:\t");
 	scanf_s("%lf %lf", &a, &b);
 	printf("please, enter the integration accuracy:\t");
 	scanf_s("%lf", &delta);
 	printf("computing, please, be patient :))\n");
 	printf("%lf", dIntegral(log10,a,b,delta));
-	c = getchar();
+	
+	scanf_s("%%");
 	return 0;
 }
 
