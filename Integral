@@ -1,4 +1,4 @@
-// ConsoleApplication2.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
+// ConsoleApplication4.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
 #include "pch.h"
@@ -9,15 +9,18 @@ double dIntegral(double (*func)(double x), double from, double to, double step)
 {
 	double i, f0;
 	double integral_summ_down, integral_summ_up, integral_summ;
+
 	integral_summ = 0.;
 	integral_summ_down = 0.;
 	integral_summ_up = 0.;
 	f0 = (*func)(from);
+	step = (step > 1e-3) ? (1e-7) : step;
+
 	for (i = from + step; i <= to; i += step)
 	{
 		integral_summ_up += (*func)(i);
 		integral_summ_down += f0;
-		f0 = (*func)(from);
+		f0 = (*func)(i);
 	}
 	integral_summ = .5*(integral_summ_down + integral_summ_up)*step;
 	printf("calculation result:\t");
@@ -30,12 +33,18 @@ int main()
 	double a, b, delta;
 	printf("please, enter the limits of integration:\t");
 	scanf_s("%lf %lf", &a, &b);
+	if (a > b)
+	{
+		delta = a;
+		a = b;
+		b = delta;
+	}
 	printf("please, enter the integration accuracy:\t");
 	scanf_s("%lf", &delta);
+
 	printf("computing, please, be patient :))\n");
 	printf("%lf", dIntegral(log10,a,b,delta));
 	
-	scanf_s("%%");
 	return 0;
 }
 
