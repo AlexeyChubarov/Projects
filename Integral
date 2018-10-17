@@ -4,25 +4,31 @@
 #include "pch.h"
 #include <iostream>
 #include <stdio.h>
+#include <math.h>
 
 double dIntegral(double (*func)(double x), double from, double to, double step)
 {
-	double i, f0;
-	double integral_summ_down, integral_summ_up, integral_summ;
+	int n,id_sign;
+	double integral_summ,change;
 
 	integral_summ = 0.;
-	integral_summ_down = 0.;
-	integral_summ_up = 0.;
-	f0 = (*func)(from);
-	step = (step > 1e-3) ? (1e-7) : step;
-
-	for (i = from + step; i <= to; i += step)
+	
+	if (from > to)
 	{
-		integral_summ_up += (*func)(i);
-		integral_summ_down += f0;
-		f0 = (*func)(i);
+		id_sign = -1;
+		change = to;
+		to = from;
+		from = change;
+	} 
+	else id_sign = 1;
+
+	n = (int)(abs(to - from) / step);
+
+	for (int i=1 ; i < n; i ++)
+	{
+		integral_summ += (*func)(from+i*step);
 	}
-	integral_summ = .5*(integral_summ_down + integral_summ_up)*step;
+	integral_summ =id_sign*(integral_summ+((*func)(from)+(*func)(to))/2.)*step;
 	printf("calculation result:\t");
 	return integral_summ;
 
@@ -33,18 +39,15 @@ int main()
 	double a, b, delta;
 	printf("please, enter the limits of integration:\t");
 	scanf_s("%lf %lf", &a, &b);
-	if (a > b)
-	{
-		delta = a;
-		a = b;
-		b = delta;
-	}
+	
 	printf("please, enter the integration accuracy:\t");
 	scanf_s("%lf", &delta);
 
 	printf("computing, please, be patient :))\n");
-	printf("%lf", dIntegral(log10,a,b,delta));
+
+	printf("calculation result :\t %lf \n", dIntegral(log10,a,b,delta));
 	
+	system("pause");
 	return 0;
 }
 
